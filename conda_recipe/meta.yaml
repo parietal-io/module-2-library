@@ -1,0 +1,31 @@
+{% set data = load_setup_py_data() %}
+
+package:
+  name: module-2-package
+  version: {{ data.get('version') }}
+
+source:
+  path: ../
+
+build:
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+  entry_points:
+    - m2l = m2l:cli
+  
+
+requirements:
+  build:
+    - python
+
+  run:
+    - python
+    - click
+    - jinja2
+
+test:
+  requires:
+    - pytest
+
+about:
+  description: Create Python packages from single modules
+  author: Carlos H Brandt

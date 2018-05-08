@@ -1,0 +1,2 @@
+include versioneer.py
+include m2l/_version.py

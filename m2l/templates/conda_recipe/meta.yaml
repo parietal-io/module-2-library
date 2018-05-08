@@ -1,0 +1,37 @@
+{%- raw -%}
+{% set data = load_setup_py_data() %}
+{%- endraw %}
+
+package:
+  name: {{pkg.pkgname}}
+  {%- raw %}
+  version: {{ data.get('version') }}
+  {%- endraw %}
+
+source:
+  path: ../
+
+build:
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+  {%- if pkg.entrypoint %}
+  entry_points:
+    - {{pkg.pkgimp}} = {{pkg.pkgimp}}:{{pkg.entrypoint}}
+  {% endif %}
+
+requirements:
+  build:
+    - python
+
+  run:
+    - python
+  {%- for package in pkg.requires %}
+    - {{ package }}
+  {%- endfor %}
+
+test:
+  requires:
+    - pytest
+
+about:
+  description: {{pkg.description}}
+  author: {{pkg.author}}
